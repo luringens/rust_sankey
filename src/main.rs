@@ -24,6 +24,13 @@ struct Entry {
     pub value: u32,
 }
 
+struct Node {
+    pub name: String,
+    pub col: u32,
+    pub in_val: u32,
+    pub out_val: u32,
+}
+
 fn render_graph() {
     let sample_data = [
         Entry {
@@ -67,17 +74,14 @@ fn render_graph() {
             value: 160,
         },
     ];
-    let mut image = DynamicImage::new_rgba8(500, 250).to_rgba();
-
-    const padding: u32 = 18;
 
     let mut graph = Graph::<&str, u32>::new();
-    let mut nodes = HashMap::new();
+    let mut graph_nodes = HashMap::new();
     for entry in &sample_data {
-        let source = *nodes
+        let source = *graph_nodes
             .entry(&entry.source)
             .or_insert(graph.add_node(entry.source.as_ref()));
-        let target = *nodes
+        let target = *graph_nodes
             .entry(&entry.target)
             .or_insert(graph.add_node(entry.target.as_ref()));
         graph.add_edge(source, target, entry.value);
@@ -87,6 +91,18 @@ fn render_graph() {
         .externals(petgraph::Direction::Incoming)
         .map(|n| (0, n))
         .collect();
+
+    let mut children = Vec::new();
+
+    while let Some((_, node)) = starts.pop() {
+        for child in graph.neighbors_directed(node, petgraph::Direction::Outgoing) {
+            children.push(child);
+        }
+    }
+
+    unimplemented!();
+    let mut image = DynamicImage::new_rgba8(500, 250).to_rgba();
+    const padding: u32 = 18;
 
     // Find height and width of graph for positioning
     // Bin nodes into columns
