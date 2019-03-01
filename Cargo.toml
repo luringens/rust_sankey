@@ -5,6 +5,8 @@ authors = ["Stian Soltvedt <stian@soltvedt.info>"]
 edition = "2018"
 
 [dependencies]
+csv = "1"
 image = "0.21"
 rusttype = "0.7"
-#petgraph = "0.4"
+serde = { version = "1", features = ["derive"] }
+structopt = "0.2"

@@ -33,7 +33,7 @@ impl PositionedNode {
     }
 }
 
-pub(crate) fn render_graph(nodes: Vec<Node>, edges: Vec<Edge>) {
+pub(crate) fn render_graph(nodes: Vec<Node>, edges: Vec<Edge>) -> ImageBuffer<Rgba<u8>, Vec<u8>> {
     let image_width: u32 = 600;
     let image_height: u32 = 600;
     let padding: u32 = 14;
@@ -73,7 +73,8 @@ pub(crate) fn render_graph(nodes: Vec<Node>, edges: Vec<Edge>) {
 
     render_edges(edges, &mut nodes, &mut image, height_per_value);
     render_nodes(nodes.values(), &mut image, padding, image_width, node_width);
-    image.save("./output.png").expect("Failed to save image");
+
+    image
 }
 
 fn position_nodes(
