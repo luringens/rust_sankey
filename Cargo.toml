@@ -2,11 +2,11 @@
 name = "sankey"
 version = "0.1.0"
 authors = ["Stian Soltvedt <stian@soltvedt.info>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 csv = "1"
-image = "0.21"
-rusttype = "0.7"
-serde = { version = "1", features = ["derive"] }
-structopt = "0.2"
+image = "0.24"
+rusttype = "0.9"
+serde = { version = "1.0", features = ["derive"] }
+structopt = "0.3"

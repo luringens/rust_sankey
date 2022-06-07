@@ -82,7 +82,7 @@ impl<'a> TextRenderer<'a> {
 
 impl<'a> Default for TextRenderer<'a> {
     fn default() -> Self {
-        let font = Font::from_bytes(FONT_DATA).expect("Error constructing Font");
+        let font = Font::try_from_bytes(FONT_DATA).expect("Error constructing Font");
         let scale = Scale::uniform(FONT_SCALE);
         let colour = (255, 255, 255);
         Self::new(font, scale, colour)

@@ -22,7 +22,7 @@ struct Opt {
     output: Option<PathBuf>,
 }
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let opt = Opt::from_args();
 
     let nodes_file = File::open(opt.nodes)?;

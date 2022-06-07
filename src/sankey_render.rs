@@ -6,8 +6,6 @@ use std::{collections::HashMap, ops::DerefMut};
 struct PositionedNode {
     pub name: String,
     pub value: u32,
-    pub col: u32,
-    pub row: u32,
     pub x1: u32,
     pub x2: u32,
     pub y1: u32,
@@ -21,8 +19,6 @@ impl PositionedNode {
         Self {
             name: n.name.clone(),
             value: n.value,
-            col: n.col,
-            row: n.row,
             x1,
             x2,
             y1,
@@ -59,7 +55,7 @@ pub(crate) fn render_graph(nodes: Vec<Node>, edges: Vec<Edge>) -> ImageBuffer<Rg
     let width = nodes.iter().map(|node| node.col).max().expect("No nodes?");
     let col_separation = (image_width - 2 * padding - node_width) / width;
 
-    let mut image = DynamicImage::new_rgba8(image_width, image_height).to_rgba();
+    let mut image = DynamicImage::new_rgba8(image_width, image_height).to_rgba8();
 
     // Find the positions of all the nodes.
     let mut nodes = position_nodes(
@@ -117,7 +113,7 @@ fn render_nodes<'a, T>(
     T: DerefMut<Target = [<Rgba<u8> as image::Pixel>::Subpixel]>,
 {
     let textrenderer = TextRenderer::default();
-    for node in nodes.into_iter() {
+    for node in nodes {
         for (x, y) in (node.y1..=node.y2).flat_map(|y| (node.x1..=node.x2).map(move |x| (x, y))) {
             image.put_pixel(x, y, image::Rgba([0u8, 127u8, 255u8, 255u8]));
         }
@@ -204,12 +200,7 @@ fn get_line(a: (u32, u32), b: (u32, u32)) -> Vec<(u32, u32)> {
     let dy = (y2 - y1).abs();
     let mut err = dx / 2;
     let mut y = y1;
-    let ystep: i32;
-    if y1 < y2 {
-        ystep = 1;
-    } else {
-        ystep = -1;
-    }
+    let ystep: i32 = if y1 < y2 { 1 } else { -1 };
     for x in x1..(x2 + 1) {
         if is_steep {
             points.push((y as u32, x as u32));
